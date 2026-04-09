@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  discord-kuma-bot:
+    build: .
+    container_name: uptime-kuma-discord-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      # Expone el puerto 8080 para que Uptime Kuma envíe las notificaciones al webhook
+      # Formato: PUERTO_HOST:PUERTO_CONTENEDOR
+      - "15830:${WEBHOOK_PORT:-15830}"
+    volumes:
+      # Si necesitas que tu bot guarde logs, puedes montar sus carpetas, pero no es necesario para este caso de uso
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
