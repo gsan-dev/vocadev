@@ -43,11 +43,14 @@ class WebServer:
                 return
 
         # Uptime Kuma payload típico:
-        monitor_name = data.get("monitor", {}).get("name", "Servicio Desconocido")
+        monitor_data = data.get("monitor") or {}
+        monitor_name = monitor_data.get("name", "Ping de Prueba / Desconocido")
+        
+        heartbeat_data = data.get("heartbeat") or {}
         # El status suele venir bajo "heartbeat", status=1 (UP), status=0 (DOWN) o status=2 (PENDING)
-        status = data.get("heartbeat", {}).get("status", 0) 
+        status = heartbeat_data.get("status", 1) # Asumimos OK si es un payload de prueba
         msg = data.get("msg", "Sin información adicional")
-        heartbeat_ping = data.get("heartbeat", {}).get("ping", "N/A")
+        heartbeat_ping = heartbeat_data.get("ping", "N/A")
 
         if status == 1:
             color = discord.Color.green()
